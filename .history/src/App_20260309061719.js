@@ -114,9 +114,9 @@ import Header from "./Header";
 
 
 function App() {
-  const API_URL = "https://recipeblog-6joc.onrender.com/api/recipes";
+  const API_URL = "https://recipe-blog-backend.onrender.com/api/recipes";
 
-  
+  https://recipeblog-6joc.onrender.com/
   const [recipes, setRecipes] = useState([]);
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
@@ -131,7 +131,7 @@ function App() {
 
   const fetchRecipes = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await axios.get("http://localhost:5000/api/recipes");
       setRecipes(res.data);
     } catch (error) {
       console.error("Error fetching recipes:", error);
@@ -143,14 +143,14 @@ function App() {
 
   try {
     if (editId) {
-      await axios.put(`${API_URL}/${editId}`, {
+      await axios.put(`http://localhost:5000/api/recipes/${editId}`, {
         title,
         ingredients,
         instructions,
       });
       setEditId(null);
     } else {
-      await axios.post(API_URL, {
+      await axios.post("http://localhost:5000/api/recipes", {
         title,
         ingredients,
         instructions,
@@ -168,7 +168,7 @@ function App() {
 
   const handleDelete = async (id) => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await axios.delete(`http://localhost:5000/api/recipes/${id}`);
     fetchRecipes(); // refresh list
   } catch (error) {
     console.error("Error deleting recipe:", error);

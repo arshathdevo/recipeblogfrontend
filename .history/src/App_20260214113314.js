@@ -104,26 +104,12 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { motion } from "framer-motion";
-import Header from "./Header";
-
-  
-
-
-
-
 
 function App() {
-  const API_URL = "https://recipeblog-6joc.onrender.com/api/recipes";
-
-  
   const [recipes, setRecipes] = useState([]);
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [editId, setEditId] = useState(null);
-  const [search, setSearch] = useState("");
-
 
   useEffect(() => {
     fetchRecipes();
@@ -131,72 +117,47 @@ function App() {
 
   const fetchRecipes = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await axios.get("http://localhost:5000/api/recipes");
       setRecipes(res.data);
     } catch (error) {
       console.error("Error fetching recipes:", error);
     }
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    if (editId) {
-      await axios.put(`${API_URL}/${editId}`, {
+    try {
+      await axios.post("http://localhost:5000/api/recipes", {
         title,
         ingredients,
         instructions,
       });
-      setEditId(null);
-    } else {
-      await axios.post(API_URL, {
-        title,
-        ingredients,
-        instructions,
-      });
+
+      // Clear form
+      setTitle("");
+      setIngredients("");
+      setInstructions("");
+
+      // Refresh recipe list
+      fetchRecipes();
+    } catch (error) {
+      console.error("Error adding recipe:", error);
     }
-
-    setTitle("");
-    setIngredients("");
-    setInstructions("");
-    fetchRecipes();
-  } catch (error) {
-    console.error("Error saving recipe:", error);
-  }
-};
-
+  };
   const handleDelete = async (id) => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await axios.delete(`http://localhost:5000/api/recipes/${id}`);
     fetchRecipes(); // refresh list
   } catch (error) {
     console.error("Error deleting recipe:", error);
   }
 };
-const handleEdit = (recipe) => {
-  setTitle(recipe.title);
-  setIngredients(recipe.ingredients);
-  setInstructions(recipe.instructions);
-  setEditId(recipe._id);
-};
-
 
 
   return (
-    
-     
-
-
-    <>
-      <Header />
-      
-    
-
-     
-     
-    <div className="container">
-      
+    <div style={{ padding: "20px" }}>
+      <h1>Recipe Blog App 🍲</h1>
 
       {/* ✅ FORM SHOULD BE OUTSIDE MAP */}
       <h2>Add New Recipe</h2>
@@ -228,64 +189,31 @@ const handleEdit = (recipe) => {
       </form>
 
       <hr />
-      <input
-  type="text"
-  placeholder="Search recipes..."
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-  className="search"
-/>
 
       {/* ✅ DISPLAY RECIPES */}
-     {recipes.length === 0 ? (
-  <p>No recipes found</p>
-) : (
-  
-  
-  <div className="recipe-grid">
-  {recipes
-    .filter((recipe) =>
-      recipe.title.toLowerCase().includes(search.toLowerCase())
-    )
-    .map((recipe) => (
-      <motion.div
-        key={recipe._id}
-        className="card"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h2>{recipe.title}</h2>
-        <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
-        <p><strong>Instructions:</strong> {recipe.instructions}</p>
-
-        <div className="button-group">
-          <button
-            className="edit-btn"
-            onClick={() => handleEdit(recipe)}
+      {recipes.length === 0 ? (
+        <p>No recipes found</p>
+      ) : (
+        recipes.map((recipe) => (
+          <div
+            key={recipe._id}
+            style={{
+              border: "1px solid #ccc",
+              padding: "10px",
+              margin: "10px 0",
+            }}
           >
-            Edit
-          </button>
+            <h2>{recipe.title}</h2>
+            <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
+            <p><strong>Instructions:</strong> {recipe.instructions}</p>
+            <button onClick={() => handleDelete(recipe._id)}>
+  Delete
+</button>
 
-          <button
-            className="delete-btn"
-            onClick={() => handleDelete(recipe._id)}
-          >
-            Delete
-          </button>
-        </div>
-      </motion.div>
-    ))}
-</div>
-
+          </div>
+        ))
       )}
-      
-
     </div>
-    <footer className="footer">
-  © {new Date().getFullYear()} FlavorStack. All rights reserved.
-</footer>
-</>
   );
 }
 

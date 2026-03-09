@@ -141,12 +141,12 @@ button {
 }
 .footer {
   text-align: center;
-  padding: 15px 0;
-  font-size: 14px;
-  color: #33373e;
+  padding: 20px;
+  background: #111827;
+  color: white;
   margin-top: 40px;
+ 
 }
-
 .search {
   width: 100%;
   max-width: 400px;

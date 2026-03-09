@@ -138,12 +138,11 @@ button {
 .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-}
-.footer {
+}.footer {
   text-align: center;
   padding: 15px 0;
   font-size: 14px;
-  color: #33373e;
+  color: #6b7280;
   margin-top: 40px;
 }
 

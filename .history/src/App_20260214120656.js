@@ -104,7 +104,8 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { motion } from "framer-motion";
+
+
 import Header from "./Header";
 
   
@@ -114,16 +115,11 @@ import Header from "./Header";
 
 
 function App() {
-  const API_URL = "https://recipeblog-6joc.onrender.com/api/recipes";
-
-  
   const [recipes, setRecipes] = useState([]);
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
   const [editId, setEditId] = useState(null);
-  const [search, setSearch] = useState("");
-
 
   useEffect(() => {
     fetchRecipes();
@@ -131,7 +127,7 @@ function App() {
 
   const fetchRecipes = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await axios.get("http://localhost:5000/api/recipes");
       setRecipes(res.data);
     } catch (error) {
       console.error("Error fetching recipes:", error);
@@ -143,14 +139,14 @@ function App() {
 
   try {
     if (editId) {
-      await axios.put(`${API_URL}/${editId}`, {
+      await axios.put(`http://localhost:5000/api/recipes/${editId}`, {
         title,
         ingredients,
         instructions,
       });
       setEditId(null);
     } else {
-      await axios.post(API_URL, {
+      await axios.post("http://localhost:5000/api/recipes", {
         title,
         ingredients,
         instructions,
@@ -168,7 +164,7 @@ function App() {
 
   const handleDelete = async (id) => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await axios.delete(`http://localhost:5000/api/recipes/${id}`);
     fetchRecipes(); // refresh list
   } catch (error) {
     console.error("Error deleting recipe:", error);
@@ -187,16 +183,21 @@ const handleEdit = (recipe) => {
     
      
 
-
+function App() {
+  return (
     <>
       <Header />
-      
-    
+      <div className="container">
+        {/* your content */}
+      </div>
+    </>
+  );
+}
 
      
      
     <div className="container">
-      
+      <h1>FlavorStack🍲</h1>
 
       {/* ✅ FORM SHOULD BE OUTSIDE MAP */}
       <h2>Add New Recipe</h2>
@@ -228,64 +229,38 @@ const handleEdit = (recipe) => {
       </form>
 
       <hr />
-      <input
-  type="text"
-  placeholder="Search recipes..."
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-  className="search"
-/>
 
       {/* ✅ DISPLAY RECIPES */}
      {recipes.length === 0 ? (
   <p>No recipes found</p>
 ) : (
-  
-  
   <div className="recipe-grid">
-  {recipes
-    .filter((recipe) =>
-      recipe.title.toLowerCase().includes(search.toLowerCase())
-    )
-    .map((recipe) => (
-      <motion.div
-        key={recipe._id}
-        className="card"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h2>{recipe.title}</h2>
-        <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
-        <p><strong>Instructions:</strong> {recipe.instructions}</p>
+    {recipes.map((recipe) => (
 
-        <div className="button-group">
-          <button
-            className="edit-btn"
-            onClick={() => handleEdit(recipe)}
-          >
-            Edit
-          </button>
+         <div key={recipe._id} className="card">
 
-          <button
-            className="delete-btn"
-            onClick={() => handleDelete(recipe._id)}
-          >
-            Delete
-          </button>
+            <h2>{recipe.title}</h2>
+            <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
+            <p><strong>Instructions:</strong> {recipe.instructions}</p>
+            <div className="button-group">
+            
+              <button className="edit-btn" onClick={() => handleEdit(recipe)}>
+
+  Edit
+</button>
+
+
+            
+            <button className="delete-btn" onClick={() => handleDelete(recipe._id)}>
+
+  Delete
+</button></div>
+
+          </div>
+        ))}
         </div>
-      </motion.div>
-    ))}
-</div>
-
       )}
-      
-
     </div>
-    <footer className="footer">
-  © {new Date().getFullYear()} FlavorStack. All rights reserved.
-</footer>
-</>
   );
 }
 

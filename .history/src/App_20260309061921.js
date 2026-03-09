@@ -150,7 +150,7 @@ function App() {
       });
       setEditId(null);
     } else {
-      await axios.post(API_URL, {
+      await axios.post("http://localhost:5000/api/recipes", {
         title,
         ingredients,
         instructions,
@@ -168,7 +168,7 @@ function App() {
 
   const handleDelete = async (id) => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await axios.delete(`http://localhost:5000/api/recipes/${id}`);
     fetchRecipes(); // refresh list
   } catch (error) {
     console.error("Error deleting recipe:", error);
