@@ -5,7 +5,7 @@ function Header() {
       <nav>
         <a href="/">Home</a>
         <a href="#add">Add Recipe</a>
-        <a href="https://github.com/arshathdevo" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/arshathdevo" target="_blank" >GitHub</a>
       </nav>
     </header>
   );
