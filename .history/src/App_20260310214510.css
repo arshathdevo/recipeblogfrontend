@@ -52,10 +52,9 @@ body {
 /* MAIN CONTAINER */
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: auto;
   padding: 40px 20px;
-  box-sizing: border-box;
 }
 
 h1 {
@@ -81,7 +80,6 @@ form textarea {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
-  box-sizing: border-box;
 }
 
 form button {
@@ -101,25 +99,40 @@ form button:hover {
   flex-direction: column;
   gap: 20px;
 }
-
-/* RECIPE CARD */
-
 .card {
   width: 100%;
-  max-width: 100%;
+  max-width: 800px;
+  margin: auto;
   background: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-  box-sizing: border-box;
-  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.card p {
   word-break: break-word;
+  line-height: 1.5;
+}
+
+
+
+
+/* RECIPE CARD */
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
 
@@ -127,15 +140,10 @@ form button:hover {
   margin-top: 0;
 }
 
-.card p {
-  overflow-wrap: break-word;
-  line-height: 1.6;
-}
-
 /* BUTTONS */
 
 .button-group {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 button {
@@ -174,7 +182,6 @@ button {
   margin-top: 20px;
   font-size: 15px;
   outline: none;
-  box-sizing: border-box;
 }
 
 .search:focus {
@@ -200,8 +207,8 @@ button {
 
 @media (max-width: 900px) {
 
-  .container {
-    padding: 30px 15px;
+  .recipe-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
 }
@@ -235,6 +242,10 @@ button {
 
   .nav.active {
     display: flex;
+  }
+
+  .recipe-grid {
+    grid-template-columns: 1fr;
   }
 
   .container {
